@@ -1,4 +1,4 @@
-# Experimentforge — Présentation complète
+# ExperimentForge — Présentation complète
 
 ## Présentation
 experimentforge est un registre immuable, hashé (SHA-256), auditable et rejouable.
