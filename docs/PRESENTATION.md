@@ -26,3 +26,16 @@ curl -X POST http://localhost:8000/v1/replication-dossiers -d '{"experiment_ids"
 
 ## Pour qui ?
 Devs, auditeurs, ops, chercheurs — qui ont besoin d'une preuve opposable, pas d'un verdict déclaratif.
+
+## Problèmes réglés (détaillés)
+- **Experimentforge** → - Preuve / dossier / trace non opposable → résolu par dossier immuable et hash SHA-256
+- **Experimentforge** → - Verdict déclaratif sans justification → le dossier expose obligations, fournisseurs et ratios
+- **Experimentforge** → - Chaînage caché ou lacune invisible → serveur recharge et recalcule indépendamment du client
+- **Experimentforge** → - Tiers qui ne peut pas relancer → le dossier est public et rejouable sans clé client
+
+## Exemples d'utilisation (scénarios réels)
+- **Labo R&D : réplication 6 mois après** → le dossier sert de preuve technique (pas d'autorité déclarative)
+- **ML : 3 seeds prouvés** → le dossier sert de preuve technique (pas d'autorité déclarative)
+- **Essai clinique : protocole→run→résultat** → le dossier sert de preuve technique (pas d'autorité déclarative)
+
+
