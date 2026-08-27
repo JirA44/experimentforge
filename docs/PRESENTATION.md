@@ -1,18 +1,28 @@
-# ExperimentForge — registre d'expériences
+# Experimentforge — Présentation complète
 
 ## Présentation
-experimentforge est un registre immuable, hashé et auditable.
+experimentforge est un registre immuable, hashé (SHA-256), auditable et rejouable.
 
-## À quoi ça sert ?
-Vérifie la réplication et la traçabilité des expériences.
+## À quoi ça sert ? (problèmes réglés)
+- **Expérience non reproductible** → résolu par un dossier déterministe, ordre-indépendant
+- **Protocole changé sans version** → résolu par un dossier déterministe, ordre-indépendant
+- **Résultat annoncé sans preuve de réplication** → résolu par un dossier déterministe, ordre-indépendant
 
-## Cas d'usages concrets
-- Labo R&D, ML experiments, essais cliniques
+## Cas d'utilisation concrets
+- Labo R&D: rejouer une expérience à l'identique 6 mois plus tard
+- ML: prouver que le modèle X a bien été répliqué sur 3 seeds
+- Essai clinique: chaînage protocole -> run -> résultat
 
-## À quoi ça pourrait servir (futur)
-- Reproductibilité, méta-analyse, certification labo
+## Exemples d'utilisation (API)
+```bash
+curl -X POST http://localhost:8000/v1/replication-dossiers -d '{"experiment_ids": [...] }'
+# → { "qualification": "COMPLETE|GAPPED|INSUFFICIENT|INCOMPATIBLE", "coverage_ratio": 0.94, ... }
+```
 
-## En 1 commande
-`ash
-curl -X POST http://localhost:8000/v1/... # voir README
-`
+## À quoi ça pourrait servir (futur / possibilités)
+- Reproductibilité scientifique automatique
+- Méta-analyse vérifiable
+- Certification labo ISO 17025
+
+## Pour qui ?
+Devs, auditeurs, ops, chercheurs — qui ont besoin d'une preuve opposable, pas d'un verdict déclaratif.
