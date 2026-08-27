@@ -1,3 +1,5 @@
+> **Présentation → [docs/PRESENTATION.md](docs/PRESENTATION.md)** — à quoi ça sert, cas d'usages, usages futurs.
+
 # ExperimentForge V1.07 Starter
 
 ExperimentForge est un registre d'expériences reproductibles. Il fige les hypothèses et chaque version de protocole, conserve les observations brutes avec leur provenance, puis calcule côté serveur les agrégats, l'intervalle de confiance et un verdict conservateur.
@@ -118,3 +120,4 @@ Documentation interactive : `http://127.0.0.1:8016/docs`.
 ```
 
 Le moteur V1.07 emploie une différence de moyennes et un intervalle normal bilatéral à 95 % (`z=1,96`). Ses synthèses et dossiers sont des diagnostics reproductibles, pas une certification automatique. Ils ne démontrent ni causalité, ni vérité universelle, ni validité externe.
+
