@@ -1,0 +1,2697 @@
+openapi: 3.1.0
+info:
+  title: ExperimentForge API
+  description: 'Registre d''expériences reproductibles : hypothèses et protocoles
+    immuables, observations brutes append-only, évaluations, réplications et synthèses
+    multi-expériences, diagnostics d''influence, écarts au protocole, stabilité d''effet
+    et couverture des preuves de réplication.'
+  version: 1.0.7
+paths:
+  /health:
+    get:
+      summary: Health
+      operationId: health_health_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /info:
+    get:
+      summary: Info
+      operationId: info_info_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /v1/experiments:
+    get:
+      summary: List Experiments
+      operationId: list_experiments_v1_experiments_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Experiment'
+                type: array
+                title: Response List Experiments V1 Experiments Get
+    post:
+      summary: Create Experiment
+      operationId: create_experiment_v1_experiments_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExperimentCreate'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Experiment'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/experiments/{experiment_id}:
+    get:
+      summary: Get Experiment
+      operationId: get_experiment_v1_experiments__experiment_id__get
+      parameters:
+      - name: experiment_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Experiment Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Experiment'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/experiments/{experiment_id}/protocols:
+    post:
+      summary: Add Protocol
+      operationId: add_protocol_v1_experiments__experiment_id__protocols_post
+      parameters:
+      - name: experiment_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Experiment Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProtocolCreate'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProtocolVersion'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      summary: List Protocols
+      operationId: list_protocols_v1_experiments__experiment_id__protocols_get
+      parameters:
+      - name: experiment_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Experiment Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProtocolVersion'
+                title: Response List Protocols V1 Experiments  Experiment Id  Protocols
+                  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/experiments/{experiment_id}/observations:
+    post:
+      summary: Add Observation
+      operationId: add_observation_v1_experiments__experiment_id__observations_post
+      parameters:
+      - name: experiment_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Experiment Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ObservationCreate'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Observation'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      summary: List Observations
+      operationId: list_observations_v1_experiments__experiment_id__observations_get
+      parameters:
+      - name: experiment_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Experiment Id
+      - name: protocol_version
+        in: query
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+          title: Protocol Version
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Observation'
+                title: Response List Observations V1 Experiments  Experiment Id  Observations
+                  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/experiments/{experiment_id}/evaluations:
+    post:
+      summary: Evaluate
+      operationId: evaluate_v1_experiments__experiment_id__evaluations_post
+      parameters:
+      - name: experiment_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Experiment Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EvaluationCreate'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Evaluation'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      summary: List Evaluations
+      operationId: list_evaluations_v1_experiments__experiment_id__evaluations_get
+      parameters:
+      - name: experiment_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Experiment Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Evaluation'
+                title: Response List Evaluations V1 Experiments  Experiment Id  Evaluations
+                  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/replication-reports:
+    get:
+      summary: List Replication Reports
+      operationId: list_replication_reports_v1_replication_reports_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ReplicationReport'
+                type: array
+                title: Response List Replication Reports V1 Replication Reports Get
+    post:
+      summary: Create Replication Report
+      operationId: create_replication_report_v1_replication_reports_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReplicationReportCreate'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReplicationReport'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/replication-reports/{report_id}:
+    get:
+      summary: Get Replication Report
+      operationId: get_replication_report_v1_replication_reports__report_id__get
+      parameters:
+      - name: report_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Report Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReplicationReport'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/syntheses:
+    get:
+      summary: List Syntheses
+      operationId: list_syntheses_v1_syntheses_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/SynthesisReport'
+                type: array
+                title: Response List Syntheses V1 Syntheses Get
+    post:
+      summary: Create Synthesis
+      operationId: create_synthesis_v1_syntheses_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SynthesisCreate'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SynthesisReport'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/syntheses/{synthesis_id}:
+    get:
+      summary: Get Synthesis
+      operationId: get_synthesis_v1_syntheses__synthesis_id__get
+      parameters:
+      - name: synthesis_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Synthesis Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SynthesisReport'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/influence-reports:
+    get:
+      summary: List Influence Reports
+      operationId: list_influence_reports_v1_influence_reports_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/InfluenceReport'
+                type: array
+                title: Response List Influence Reports V1 Influence Reports Get
+    post:
+      summary: Create Influence Report
+      operationId: create_influence_report_v1_influence_reports_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InfluenceReportCreate'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InfluenceReport'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/influence-reports/{report_id}:
+    get:
+      summary: Get Influence Report
+      operationId: get_influence_report_v1_influence_reports__report_id__get
+      parameters:
+      - name: report_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Report Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InfluenceReport'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/deviation-reports:
+    get:
+      summary: List Deviation Reports
+      operationId: list_deviation_reports_v1_deviation_reports_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ProtocolDeviationReport'
+                type: array
+                title: Response List Deviation Reports V1 Deviation Reports Get
+    post:
+      summary: Create Deviation Report
+      operationId: create_deviation_report_v1_deviation_reports_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeviationReportCreate'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProtocolDeviationReport'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/deviation-reports/{report_id}:
+    get:
+      summary: Get Deviation Report
+      operationId: get_deviation_report_v1_deviation_reports__report_id__get
+      parameters:
+      - name: report_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Report Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProtocolDeviationReport'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/effect-stability-dossiers:
+    get:
+      summary: List Effect Stability Dossiers
+      operationId: list_effect_stability_dossiers_v1_effect_stability_dossiers_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/EffectStabilityDossier'
+                type: array
+                title: Response List Effect Stability Dossiers V1 Effect Stability
+                  Dossiers Get
+    post:
+      summary: Create Effect Stability Dossier
+      operationId: create_effect_stability_dossier_v1_effect_stability_dossiers_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EffectStabilityDossierCreate'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EffectStabilityDossier'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/effect-stability-dossiers/{dossier_id}:
+    get:
+      summary: Get Effect Stability Dossier
+      operationId: get_effect_stability_dossier_v1_effect_stability_dossiers__dossier_id__get
+      parameters:
+      - name: dossier_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Dossier Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EffectStabilityDossier'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/replication-robustness-dossiers:
+    get:
+      summary: List Replication Robustness Dossiers
+      operationId: list_replication_robustness_dossiers_v1_replication_robustness_dossiers_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ReplicationRobustnessDossier'
+                type: array
+                title: Response List Replication Robustness Dossiers V1 Replication
+                  Robustness Dossiers Get
+    post:
+      summary: Create Replication Robustness Dossier
+      operationId: create_replication_robustness_dossier_v1_replication_robustness_dossiers_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReplicationRobustnessDossierCreate'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReplicationRobustnessDossier'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/replication-robustness-dossiers/{dossier_id}:
+    get:
+      summary: Get Replication Robustness Dossier
+      operationId: get_replication_robustness_dossier_v1_replication_robustness_dossiers__dossier_id__get
+      parameters:
+      - name: dossier_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Dossier Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReplicationRobustnessDossier'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/replication-evidence-coverage-dossiers:
+    get:
+      summary: List Replication Evidence Coverage Dossiers
+      operationId: list_replication_evidence_coverage_dossiers_v1_replication_evidence_coverage_dossiers_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ReplicationEvidenceCoverageDossier'
+                type: array
+                title: Response List Replication Evidence Coverage Dossiers V1 Replication
+                  Evidence Coverage Dossiers Get
+    post:
+      summary: Create Replication Evidence Coverage Dossier
+      operationId: create_replication_evidence_coverage_dossier_v1_replication_evidence_coverage_dossiers_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReplicationEvidenceCoverageDossierCreate'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReplicationEvidenceCoverageDossier'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/replication-evidence-coverage-dossiers/{dossier_id}:
+    get:
+      summary: Get Replication Evidence Coverage Dossier
+      operationId: get_replication_evidence_coverage_dossier_v1_replication_evidence_coverage_dossiers__dossier_id__get
+      parameters:
+      - name: dossier_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Dossier Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReplicationEvidenceCoverageDossier'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/experiments/{experiment_id}/audit:
+    get:
+      summary: List Audit
+      operationId: list_audit_v1_experiments__experiment_id__audit_get
+      parameters:
+      - name: experiment_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Experiment Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AuditEvent'
+                title: Response List Audit V1 Experiments  Experiment Id  Audit Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    AuditEvent:
+      properties:
+        sequence:
+          type: integer
+          title: Sequence
+        event_type:
+          type: string
+          title: Event Type
+        entity_type:
+          type: string
+          title: Entity Type
+        entity_id:
+          type: string
+          title: Entity Id
+        payload:
+          additionalProperties: true
+          type: object
+          title: Payload
+        previous_event_hash:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Previous Event Hash
+        event_hash:
+          type: string
+          title: Event Hash
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+      additionalProperties: false
+      type: object
+      required:
+      - sequence
+      - event_type
+      - entity_type
+      - entity_id
+      - payload
+      - event_hash
+      - created_at
+      title: AuditEvent
+    DeviationFinding:
+      properties:
+        category:
+          type: string
+          title: Category
+        code:
+          type: string
+          title: Code
+        material:
+          type: boolean
+          title: Material
+        observed:
+          title: Observed
+        planned:
+          title: Planned
+        detail:
+          type: string
+          title: Detail
+      additionalProperties: false
+      type: object
+      required:
+      - category
+      - code
+      - material
+      - observed
+      - planned
+      - detail
+      title: DeviationFinding
+    DeviationReportCreate:
+      properties:
+        experiment_id:
+          anyOf:
+          - type: string
+            maxLength: 200
+            minLength: 1
+          - type: 'null'
+          title: Experiment Id
+        protocol_version:
+          anyOf:
+          - type: integer
+            minimum: 1.0
+          - type: 'null'
+          title: Protocol Version
+        evaluation_id:
+          anyOf:
+          - type: string
+            maxLength: 200
+            minLength: 1
+          - type: 'null'
+          title: Evaluation Id
+      additionalProperties: false
+      type: object
+      title: DeviationReportCreate
+    DeviationVerdict:
+      type: string
+      enum:
+      - ADHERENT
+      - MINOR_DEVIATIONS
+      - MATERIAL_DEVIATIONS
+      - INSUFFICIENT
+      - INCOMPATIBLE
+      title: DeviationVerdict
+    Direction:
+      type: string
+      enum:
+      - greater
+      - less
+      - different
+      title: Direction
+    EffectStabilityCompatibility:
+      properties:
+        same_experiment:
+          type: boolean
+          title: Same Experiment
+        hypothesis_statement:
+          type: boolean
+          title: Hypothesis Statement
+        metric_name:
+          type: boolean
+          title: Metric Name
+        metric_unit:
+          type: boolean
+          title: Metric Unit
+        group_roles:
+          type: boolean
+          title: Group Roles
+        direction:
+          type: boolean
+          title: Direction
+        analysis_method:
+          type: boolean
+          title: Analysis Method
+      additionalProperties: false
+      type: object
+      required:
+      - same_experiment
+      - hypothesis_statement
+      - metric_name
+      - metric_unit
+      - group_roles
+      - direction
+      - analysis_method
+      title: EffectStabilityCompatibility
+    EffectStabilityDossier:
+      properties:
+        id:
+          type: string
+          title: Id
+        evaluation_ids:
+          items:
+            type: string
+          type: array
+          title: Evaluation Ids
+        experiment_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Experiment Id
+        qualification:
+          $ref: '#/components/schemas/EffectStabilityQualification'
+        compatibility:
+          $ref: '#/components/schemas/EffectStabilityCompatibility'
+        evaluations:
+          items:
+            $ref: '#/components/schemas/EffectStabilityEvaluationSnapshot'
+          type: array
+          title: Evaluations
+        transitions:
+          items:
+            $ref: '#/components/schemas/EffectStabilityTransition'
+          type: array
+          title: Transitions
+        relative_range:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Relative Range
+        worst_transition:
+          anyOf:
+          - $ref: '#/components/schemas/EffectStabilityTransition'
+          - type: 'null'
+        method:
+          type: string
+          title: Method
+          default: protocol-version-effect-stability-v1
+        relative_delta_threshold:
+          type: number
+          title: Relative Delta Threshold
+          default: 0.1
+        dossier_hash:
+          type: string
+          title: Dossier Hash
+        immutable:
+          type: boolean
+          title: Immutable
+          default: true
+        reproducible:
+          type: boolean
+          title: Reproducible
+          default: true
+        idempotent_replay:
+          type: boolean
+          title: Idempotent Replay
+          default: false
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        warning:
+          type: string
+          title: Warning
+          default: Ce dossier décrit la stabilité des effets entre ces versions de
+            protocole ; il ne certifie ni causalité, ni validité externe, ni vérité.
+      additionalProperties: false
+      type: object
+      required:
+      - id
+      - evaluation_ids
+      - qualification
+      - compatibility
+      - evaluations
+      - transitions
+      - dossier_hash
+      - created_at
+      title: EffectStabilityDossier
+    EffectStabilityDossierCreate:
+      properties:
+        evaluation_ids:
+          items:
+            type: string
+          type: array
+          maxItems: 50
+          minItems: 2
+          title: Evaluation Ids
+      additionalProperties: false
+      type: object
+      required:
+      - evaluation_ids
+      title: EffectStabilityDossierCreate
+      description: Only persisted evaluation identifiers are accepted from the client.
+    EffectStabilityEvaluationSnapshot:
+      properties:
+        evaluation_id:
+          type: string
+          title: Evaluation Id
+        experiment_id:
+          type: string
+          title: Experiment Id
+        protocol_version:
+          type: integer
+          title: Protocol Version
+        protocol_hash:
+          type: string
+          title: Protocol Hash
+        evaluation_hash:
+          type: string
+          title: Evaluation Hash
+        observations_snapshot_hash:
+          type: string
+          title: Observations Snapshot Hash
+        effect:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Effect
+        interval95:
+          $ref: '#/components/schemas/Interval95'
+      additionalProperties: false
+      type: object
+      required:
+      - evaluation_id
+      - experiment_id
+      - protocol_version
+      - protocol_hash
+      - evaluation_hash
+      - observations_snapshot_hash
+      - interval95
+      title: EffectStabilityEvaluationSnapshot
+    EffectStabilityQualification:
+      type: string
+      enum:
+      - STABLE
+      - SHIFTED
+      - INSUFFICIENT
+      - INCOMPATIBLE
+      title: EffectStabilityQualification
+    EffectStabilityTransition:
+      properties:
+        from_evaluation_id:
+          type: string
+          title: From Evaluation Id
+        to_evaluation_id:
+          type: string
+          title: To Evaluation Id
+        from_protocol_version:
+          type: integer
+          title: From Protocol Version
+        to_protocol_version:
+          type: integer
+          title: To Protocol Version
+        effect_delta:
+          type: number
+          title: Effect Delta
+        relative_delta:
+          type: number
+          title: Relative Delta
+        direction_changed:
+          type: boolean
+          title: Direction Changed
+        intervals_overlap:
+          type: boolean
+          title: Intervals Overlap
+        shifted:
+          type: boolean
+          title: Shifted
+      additionalProperties: false
+      type: object
+      required:
+      - from_evaluation_id
+      - to_evaluation_id
+      - from_protocol_version
+      - to_protocol_version
+      - effect_delta
+      - relative_delta
+      - direction_changed
+      - intervals_overlap
+      - shifted
+      title: EffectStabilityTransition
+    Evaluation:
+      properties:
+        id:
+          type: string
+          title: Id
+        experiment_id:
+          type: string
+          title: Experiment Id
+        protocol_version:
+          type: integer
+          title: Protocol Version
+        method:
+          type: string
+          title: Method
+        verdict:
+          $ref: '#/components/schemas/Verdict'
+        aggregates:
+          additionalProperties:
+            $ref: '#/components/schemas/GroupAggregate'
+          type: object
+          title: Aggregates
+        treatment_minus_control:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Treatment Minus Control
+        standard_error:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Standard Error
+        interval95:
+          $ref: '#/components/schemas/Interval95'
+        experiment_hash:
+          type: string
+          title: Experiment Hash
+        protocol_hash:
+          type: string
+          title: Protocol Hash
+        observations_snapshot_hash:
+          type: string
+          title: Observations Snapshot Hash
+        evaluation_hash:
+          type: string
+          title: Evaluation Hash
+        seed:
+          type: integer
+          title: Seed
+        reproducible:
+          type: boolean
+          title: Reproducible
+          default: true
+        idempotent_replay:
+          type: boolean
+          title: Idempotent Replay
+          default: false
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        warning:
+          type: string
+          title: Warning
+          default: Une expérience ne prouve pas une vérité universelle ; validité
+            externe, causalité et biais doivent être évalués séparément.
+      additionalProperties: false
+      type: object
+      required:
+      - id
+      - experiment_id
+      - protocol_version
+      - method
+      - verdict
+      - aggregates
+      - interval95
+      - experiment_hash
+      - protocol_hash
+      - observations_snapshot_hash
+      - evaluation_hash
+      - seed
+      - created_at
+      title: Evaluation
+    EvaluationCreate:
+      properties:
+        protocol_version:
+          type: integer
+          minimum: 1.0
+          title: Protocol Version
+      additionalProperties: false
+      type: object
+      required:
+      - protocol_version
+      title: EvaluationCreate
+    Experiment:
+      properties:
+        id:
+          type: string
+          title: Id
+        experiment_hash:
+          type: string
+          title: Experiment Hash
+        name:
+          type: string
+          title: Name
+        description:
+          type: string
+          title: Description
+        hypothesis:
+          $ref: '#/components/schemas/HypothesisSpec'
+        immutable:
+          type: boolean
+          title: Immutable
+          default: true
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+      additionalProperties: false
+      type: object
+      required:
+      - id
+      - experiment_hash
+      - name
+      - description
+      - hypothesis
+      - created_at
+      title: Experiment
+    ExperimentCreate:
+      properties:
+        name:
+          type: string
+          maxLength: 200
+          minLength: 1
+          title: Name
+        description:
+          type: string
+          maxLength: 4000
+          minLength: 1
+          title: Description
+        hypothesis:
+          $ref: '#/components/schemas/HypothesisSpec'
+        initial_protocol:
+          $ref: '#/components/schemas/ProtocolSpec'
+      additionalProperties: false
+      type: object
+      required:
+      - name
+      - description
+      - hypothesis
+      - initial_protocol
+      title: ExperimentCreate
+    GroupAggregate:
+      properties:
+        count:
+          type: integer
+          title: Count
+        mean:
+          type: number
+          title: Mean
+        sample_variance:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Sample Variance
+        minimum:
+          type: number
+          title: Minimum
+        maximum:
+          type: number
+          title: Maximum
+      additionalProperties: false
+      type: object
+      required:
+      - count
+      - mean
+      - minimum
+      - maximum
+      title: GroupAggregate
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    HypothesisSpec:
+      properties:
+        statement:
+          type: string
+          maxLength: 2000
+          minLength: 3
+          title: Statement
+        control_group:
+          type: string
+          maxLength: 80
+          minLength: 1
+          title: Control Group
+        treatment_group:
+          type: string
+          maxLength: 80
+          minLength: 1
+          title: Treatment Group
+        direction:
+          $ref: '#/components/schemas/Direction'
+        minimum_effect:
+          type: number
+          minimum: 0.0
+          title: Minimum Effect
+          default: 0.0
+      additionalProperties: false
+      type: object
+      required:
+      - statement
+      - control_group
+      - treatment_group
+      - direction
+      title: HypothesisSpec
+    InfluenceReport:
+      properties:
+        id:
+          type: string
+          title: Id
+        synthesis_id:
+          type: string
+          title: Synthesis Id
+        source_synthesis_hash:
+          type: string
+          title: Source Synthesis Hash
+        verdict:
+          $ref: '#/components/schemas/InfluenceVerdict'
+        method:
+          type: string
+          title: Method
+          default: leave-one-experiment-out-fixed-effect-v1
+        full_synthesis_qualification:
+          $ref: '#/components/schemas/SynthesisVerdict'
+        full_pooled_effect:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Full Pooled Effect
+        full_pooled_effect_variance:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Full Pooled Effect Variance
+        full_interval95:
+          $ref: '#/components/schemas/Interval95'
+        full_direction_consistent:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Full Direction Consistent
+        full_cochran_q:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Full Cochran Q
+        full_heterogeneity_i2_percent:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Full Heterogeneity I2 Percent
+        cases:
+          items:
+            $ref: '#/components/schemas/LeaveOneOutResult'
+          type: array
+          title: Cases
+        most_influential_experiment_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Most Influential Experiment Id
+        relative_delta_threshold:
+          type: number
+          title: Relative Delta Threshold
+          default: 0.1
+        influence_hash:
+          type: string
+          title: Influence Hash
+        immutable:
+          type: boolean
+          title: Immutable
+          default: true
+        reproducible:
+          type: boolean
+          title: Reproducible
+          default: true
+        idempotent_replay:
+          type: boolean
+          title: Idempotent Replay
+          default: false
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        warning:
+          type: string
+          title: Warning
+          default: Ce diagnostic mesure la sensibilité de ces instantanés sélectionnés
+            ; il ne démontre ni causalité, ni validité externe, ni vérité universelle.
+      additionalProperties: false
+      type: object
+      required:
+      - id
+      - synthesis_id
+      - source_synthesis_hash
+      - verdict
+      - full_synthesis_qualification
+      - full_interval95
+      - cases
+      - influence_hash
+      - created_at
+      title: InfluenceReport
+    InfluenceReportCreate:
+      properties:
+        synthesis_id:
+          type: string
+          maxLength: 200
+          minLength: 1
+          title: Synthesis Id
+      additionalProperties: false
+      type: object
+      required:
+      - synthesis_id
+      title: InfluenceReportCreate
+    InfluenceVerdict:
+      type: string
+      enum:
+      - ROBUST
+      - INFLUENTIAL
+      - INSUFFICIENT
+      - INCOMPATIBLE
+      title: InfluenceVerdict
+    Interval95:
+      properties:
+        lower:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Lower
+        upper:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Upper
+      additionalProperties: false
+      type: object
+      title: Interval95
+    LeaveOneOutResult:
+      properties:
+        removed_experiment_id:
+          type: string
+          title: Removed Experiment Id
+        removed_evaluation_ids:
+          items:
+            type: string
+          type: array
+          title: Removed Evaluation Ids
+        remaining_evaluation_count:
+          type: integer
+          title: Remaining Evaluation Count
+        pooled_effect:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Pooled Effect
+        pooled_effect_variance:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Pooled Effect Variance
+        interval95:
+          $ref: '#/components/schemas/Interval95'
+        direction_consistent:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Direction Consistent
+        cochran_q:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Cochran Q
+        heterogeneity_i2_percent:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Heterogeneity I2 Percent
+        synthesis_qualification:
+          $ref: '#/components/schemas/SynthesisVerdict'
+        delta_pooled_effect:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Delta Pooled Effect
+        relative_delta:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Relative Delta
+        direction_changed:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Direction Changed
+        qualification_changed:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Qualification Changed
+        influential:
+          type: boolean
+          title: Influential
+          default: false
+      additionalProperties: false
+      type: object
+      required:
+      - removed_experiment_id
+      - removed_evaluation_ids
+      - remaining_evaluation_count
+      - interval95
+      - synthesis_qualification
+      title: LeaveOneOutResult
+    Observation:
+      properties:
+        id:
+          type: string
+          title: Id
+        experiment_id:
+          type: string
+          title: Experiment Id
+        protocol_version:
+          type: integer
+          title: Protocol Version
+        group:
+          type: string
+          title: Group
+        value:
+          type: number
+          title: Value
+        observed_at:
+          type: string
+          format: date-time
+          title: Observed At
+        source_ref:
+          type: string
+          title: Source Ref
+        subject_ref:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Subject Ref
+        metadata:
+          additionalProperties: true
+          type: object
+          title: Metadata
+        observation_hash:
+          type: string
+          title: Observation Hash
+        idempotent_replay:
+          type: boolean
+          title: Idempotent Replay
+          default: false
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+      additionalProperties: false
+      type: object
+      required:
+      - id
+      - experiment_id
+      - protocol_version
+      - group
+      - value
+      - observed_at
+      - source_ref
+      - metadata
+      - observation_hash
+      - created_at
+      title: Observation
+    ObservationCreate:
+      properties:
+        idempotency_key:
+          type: string
+          maxLength: 200
+          minLength: 8
+          title: Idempotency Key
+        protocol_version:
+          type: integer
+          minimum: 1.0
+          title: Protocol Version
+        group:
+          type: string
+          maxLength: 80
+          minLength: 1
+          title: Group
+        value:
+          type: number
+          title: Value
+        observed_at:
+          type: string
+          format: date-time
+          title: Observed At
+        source_ref:
+          type: string
+          maxLength: 2000
+          minLength: 1
+          title: Source Ref
+        subject_ref:
+          anyOf:
+          - type: string
+            maxLength: 500
+          - type: 'null'
+          title: Subject Ref
+        metadata:
+          additionalProperties: true
+          type: object
+          title: Metadata
+      additionalProperties: false
+      type: object
+      required:
+      - idempotency_key
+      - protocol_version
+      - group
+      - value
+      - observed_at
+      - source_ref
+      title: ObservationCreate
+    ProtocolCreate:
+      properties:
+        specification:
+          $ref: '#/components/schemas/ProtocolSpec'
+      additionalProperties: false
+      type: object
+      required:
+      - specification
+      title: ProtocolCreate
+    ProtocolDeviationReport:
+      properties:
+        id:
+          type: string
+          title: Id
+        experiment_id:
+          type: string
+          title: Experiment Id
+        protocol_version:
+          type: integer
+          title: Protocol Version
+        evaluation_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Evaluation Id
+        experiment_hash:
+          type: string
+          title: Experiment Hash
+        protocol_hash:
+          type: string
+          title: Protocol Hash
+        observations_snapshot_hash:
+          type: string
+          title: Observations Snapshot Hash
+        verdict:
+          $ref: '#/components/schemas/DeviationVerdict'
+        findings:
+          items:
+            $ref: '#/components/schemas/DeviationFinding'
+          type: array
+          title: Findings
+        planned_samples_per_required_group:
+          type: integer
+          title: Planned Samples Per Required Group
+        usable_samples_by_group:
+          additionalProperties:
+            type: integer
+          type: object
+          title: Usable Samples By Group
+        total_observations:
+          type: integer
+          title: Total Observations
+        excluded_observations:
+          type: integer
+          title: Excluded Observations
+        missing_observations:
+          type: integer
+          title: Missing Observations
+        out_of_window_observations:
+          type: integer
+          title: Out Of Window Observations
+        endpoint_mismatches:
+          type: integer
+          title: Endpoint Mismatches
+        parameter_mismatches:
+          type: integer
+          title: Parameter Mismatches
+        sample_materiality_floor:
+          type: number
+          title: Sample Materiality Floor
+          default: 0.8
+        out_of_window_material_fraction:
+          type: number
+          title: Out Of Window Material Fraction
+          default: 0.1
+        report_hash:
+          type: string
+          title: Report Hash
+        immutable:
+          type: boolean
+          title: Immutable
+          default: true
+        reproducible:
+          type: boolean
+          title: Reproducible
+          default: true
+        idempotent_replay:
+          type: boolean
+          title: Idempotent Replay
+          default: false
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        warning:
+          type: string
+          title: Warning
+          default: Ce dossier décrit des écarts aux artefacts persistés ; il ne constitue
+            ni certification automatique, ni preuve de causalité ou de vérité universelle.
+      additionalProperties: false
+      type: object
+      required:
+      - id
+      - experiment_id
+      - protocol_version
+      - experiment_hash
+      - protocol_hash
+      - observations_snapshot_hash
+      - verdict
+      - findings
+      - planned_samples_per_required_group
+      - usable_samples_by_group
+      - total_observations
+      - excluded_observations
+      - missing_observations
+      - out_of_window_observations
+      - endpoint_mismatches
+      - parameter_mismatches
+      - report_hash
+      - created_at
+      title: ProtocolDeviationReport
+    ProtocolSpec:
+      properties:
+        name:
+          type: string
+          maxLength: 160
+          minLength: 1
+          title: Name
+        groups:
+          items:
+            type: string
+          type: array
+          maxItems: 8
+          minItems: 2
+          title: Groups
+        metric_name:
+          type: string
+          maxLength: 160
+          minLength: 1
+          title: Metric Name
+        metric_unit:
+          type: string
+          maxLength: 80
+          minLength: 1
+          title: Metric Unit
+        collection_method:
+          type: string
+          maxLength: 2000
+          minLength: 3
+          title: Collection Method
+        seed:
+          type: integer
+          maximum: 9.223372036854776e+18
+          minimum: 0.0
+          title: Seed
+        min_samples_per_group:
+          type: integer
+          maximum: 1000000.0
+          minimum: 3.0
+          title: Min Samples Per Group
+          default: 3
+        analysis_method:
+          type: string
+          pattern: ^mean-difference-ci95-v1$
+          title: Analysis Method
+          default: mean-difference-ci95-v1
+        collection_window_start:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Collection Window Start
+        collection_window_end:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Collection Window End
+        allowed_exclusion_reasons:
+          items:
+            type: string
+          type: array
+          maxItems: 100
+          title: Allowed Exclusion Reasons
+        max_exclusion_fraction:
+          type: number
+          maximum: 1.0
+          minimum: 0.0
+          title: Max Exclusion Fraction
+          default: 0.1
+        max_missing_fraction:
+          type: number
+          maximum: 1.0
+          minimum: 0.0
+          title: Max Missing Fraction
+          default: 0.05
+        analysis_parameters:
+          additionalProperties: true
+          type: object
+          title: Analysis Parameters
+      additionalProperties: false
+      type: object
+      required:
+      - name
+      - groups
+      - metric_name
+      - metric_unit
+      - collection_method
+      - seed
+      title: ProtocolSpec
+    ProtocolVersion:
+      properties:
+        id:
+          type: string
+          title: Id
+        experiment_id:
+          type: string
+          title: Experiment Id
+        version:
+          type: integer
+          title: Version
+        protocol_hash:
+          type: string
+          title: Protocol Hash
+        specification:
+          $ref: '#/components/schemas/ProtocolSpec'
+        immutable:
+          type: boolean
+          title: Immutable
+          default: true
+        idempotent_replay:
+          type: boolean
+          title: Idempotent Replay
+          default: false
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+      additionalProperties: false
+      type: object
+      required:
+      - id
+      - experiment_id
+      - version
+      - protocol_hash
+      - specification
+      - created_at
+      title: ProtocolVersion
+    ReplicationCompatibility:
+      properties:
+        hypothesis_statement:
+          type: boolean
+          title: Hypothesis Statement
+        group_roles:
+          type: boolean
+          title: Group Roles
+        direction:
+          type: boolean
+          title: Direction
+        minimum_effect:
+          type: boolean
+          title: Minimum Effect
+        metric_name:
+          type: boolean
+          title: Metric Name
+        metric_unit:
+          type: boolean
+          title: Metric Unit
+        collection_method:
+          type: boolean
+          title: Collection Method
+        analysis_method:
+          type: boolean
+          title: Analysis Method
+        minimum_sample_plan:
+          type: boolean
+          title: Minimum Sample Plan
+      additionalProperties: false
+      type: object
+      required:
+      - hypothesis_statement
+      - group_roles
+      - direction
+      - minimum_effect
+      - metric_name
+      - metric_unit
+      - collection_method
+      - analysis_method
+      - minimum_sample_plan
+      title: ReplicationCompatibility
+    ReplicationEvaluationSnapshot:
+      properties:
+        evaluation_id:
+          type: string
+          title: Evaluation Id
+        verdict:
+          $ref: '#/components/schemas/Verdict'
+        treatment_minus_control:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Treatment Minus Control
+        interval95:
+          $ref: '#/components/schemas/Interval95'
+        experiment_hash:
+          type: string
+          title: Experiment Hash
+        protocol_hash:
+          type: string
+          title: Protocol Hash
+        observations_snapshot_hash:
+          type: string
+          title: Observations Snapshot Hash
+        evaluation_hash:
+          type: string
+          title: Evaluation Hash
+        control_count:
+          type: integer
+          title: Control Count
+        treatment_count:
+          type: integer
+          title: Treatment Count
+      additionalProperties: false
+      type: object
+      required:
+      - evaluation_id
+      - verdict
+      - interval95
+      - experiment_hash
+      - protocol_hash
+      - observations_snapshot_hash
+      - evaluation_hash
+      - control_count
+      - treatment_count
+      title: ReplicationEvaluationSnapshot
+    ReplicationEvidenceCoverageDossier:
+      properties:
+        id:
+          type: string
+          title: Id
+        evaluation_ids:
+          items:
+            type: string
+          type: array
+          title: Evaluation Ids
+        experiment_ids:
+          items:
+            type: string
+          type: array
+          title: Experiment Ids
+        qualification:
+          $ref: '#/components/schemas/ReplicationEvidenceCoverageQualification'
+        compatibility:
+          $ref: '#/components/schemas/SynthesisCompatibility'
+        evaluations:
+          items:
+            $ref: '#/components/schemas/ReplicationEvidenceCoverageSnapshot'
+          type: array
+          title: Evaluations
+        required_checks:
+          items:
+            type: string
+          type: array
+          title: Required Checks
+        common_covered_checks:
+          items:
+            type: string
+          type: array
+          title: Common Covered Checks
+        common_gap_codes:
+          items:
+            type: string
+          type: array
+          title: Common Gap Codes
+        total_gap_count:
+          type: integer
+          title: Total Gap Count
+        mean_coverage_ratio:
+          type: number
+          title: Mean Coverage Ratio
+        minimum_coverage_ratio:
+          type: number
+          title: Minimum Coverage Ratio
+        worst_evaluation:
+          $ref: '#/components/schemas/ReplicationEvidenceCoverageSnapshot'
+        method:
+          type: string
+          title: Method
+          default: replication-evidence-protocol-coverage-v1
+        dossier_hash:
+          type: string
+          title: Dossier Hash
+        immutable:
+          type: boolean
+          title: Immutable
+          default: true
+        reproducible:
+          type: boolean
+          title: Reproducible
+          default: true
+        idempotent_replay:
+          type: boolean
+          title: Idempotent Replay
+          default: false
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        warning:
+          type: string
+          title: Warning
+          default: Ce dossier mesure la couverture documentaire des protocoles et
+            instantanés sélectionnés ; il ne certifie ni réplication, ni causalité,
+            ni vérité universelle.
+      additionalProperties: false
+      type: object
+      required:
+      - id
+      - evaluation_ids
+      - experiment_ids
+      - qualification
+      - compatibility
+      - evaluations
+      - required_checks
+      - common_covered_checks
+      - common_gap_codes
+      - total_gap_count
+      - mean_coverage_ratio
+      - minimum_coverage_ratio
+      - worst_evaluation
+      - dossier_hash
+      - created_at
+      title: ReplicationEvidenceCoverageDossier
+    ReplicationEvidenceCoverageDossierCreate:
+      properties:
+        evaluation_ids:
+          items:
+            type: string
+          type: array
+          maxItems: 100
+          minItems: 2
+          title: Evaluation Ids
+      additionalProperties: false
+      type: object
+      required:
+      - evaluation_ids
+      title: ReplicationEvidenceCoverageDossierCreate
+      description: Only persisted evaluation identifiers are accepted.
+    ReplicationEvidenceCoverageQualification:
+      type: string
+      enum:
+      - COMPLETE
+      - PARTIAL
+      - INSUFFICIENT
+      - INCOMPATIBLE
+      title: ReplicationEvidenceCoverageQualification
+    ReplicationEvidenceCoverageSnapshot:
+      properties:
+        evaluation_id:
+          type: string
+          title: Evaluation Id
+        experiment_id:
+          type: string
+          title: Experiment Id
+        protocol_version:
+          type: integer
+          title: Protocol Version
+        protocol_hash:
+          type: string
+          title: Protocol Hash
+        evaluation_hash:
+          type: string
+          title: Evaluation Hash
+        observations_snapshot_hash:
+          type: string
+          title: Observations Snapshot Hash
+        source_verdict:
+          $ref: '#/components/schemas/Verdict'
+        deviation_qualification:
+          $ref: '#/components/schemas/DeviationVerdict'
+        deviation_report_hash:
+          type: string
+          title: Deviation Report Hash
+        covered_checks:
+          items:
+            type: string
+          type: array
+          title: Covered Checks
+        gap_codes:
+          items:
+            type: string
+          type: array
+          title: Gap Codes
+        covered_check_count:
+          type: integer
+          title: Covered Check Count
+        required_check_count:
+          type: integer
+          title: Required Check Count
+        coverage_ratio:
+          type: number
+          title: Coverage Ratio
+      additionalProperties: false
+      type: object
+      required:
+      - evaluation_id
+      - experiment_id
+      - protocol_version
+      - protocol_hash
+      - evaluation_hash
+      - observations_snapshot_hash
+      - source_verdict
+      - deviation_qualification
+      - deviation_report_hash
+      - covered_checks
+      - gap_codes
+      - covered_check_count
+      - required_check_count
+      - coverage_ratio
+      title: ReplicationEvidenceCoverageSnapshot
+    ReplicationReport:
+      properties:
+        id:
+          type: string
+          title: Id
+        original_experiment_id:
+          type: string
+          title: Original Experiment Id
+        original_protocol_version:
+          type: integer
+          title: Original Protocol Version
+        replication_experiment_id:
+          type: string
+          title: Replication Experiment Id
+        replication_protocol_version:
+          type: integer
+          title: Replication Protocol Version
+        verdict:
+          $ref: '#/components/schemas/ReplicationVerdict'
+        compatibility:
+          $ref: '#/components/schemas/ReplicationCompatibility'
+        original:
+          $ref: '#/components/schemas/ReplicationEvaluationSnapshot'
+        replication:
+          $ref: '#/components/schemas/ReplicationEvaluationSnapshot'
+        intervals_overlap:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Intervals Overlap
+        report_hash:
+          type: string
+          title: Report Hash
+        immutable:
+          type: boolean
+          title: Immutable
+          default: true
+        reproducible:
+          type: boolean
+          title: Reproducible
+          default: true
+        idempotent_replay:
+          type: boolean
+          title: Idempotent Replay
+          default: false
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        warning:
+          type: string
+          title: Warning
+          default: Un rapport de réplication qualifie uniquement ces deux instantanés
+            et leurs protocoles ; il ne généralise ni causalité ni vérité universelle.
+      additionalProperties: false
+      type: object
+      required:
+      - id
+      - original_experiment_id
+      - original_protocol_version
+      - replication_experiment_id
+      - replication_protocol_version
+      - verdict
+      - compatibility
+      - original
+      - replication
+      - report_hash
+      - created_at
+      title: ReplicationReport
+    ReplicationReportCreate:
+      properties:
+        original_experiment_id:
+          type: string
+          maxLength: 200
+          minLength: 1
+          title: Original Experiment Id
+        original_protocol_version:
+          type: integer
+          minimum: 1.0
+          title: Original Protocol Version
+        replication_experiment_id:
+          type: string
+          maxLength: 200
+          minLength: 1
+          title: Replication Experiment Id
+        replication_protocol_version:
+          type: integer
+          minimum: 1.0
+          title: Replication Protocol Version
+      additionalProperties: false
+      type: object
+      required:
+      - original_experiment_id
+      - original_protocol_version
+      - replication_experiment_id
+      - replication_protocol_version
+      title: ReplicationReportCreate
+    ReplicationRobustnessDossier:
+      properties:
+        id:
+          type: string
+          title: Id
+        evaluation_ids:
+          items:
+            type: string
+          type: array
+          title: Evaluation Ids
+        qualification:
+          $ref: '#/components/schemas/ReplicationRobustnessQualification'
+        compatibility:
+          $ref: '#/components/schemas/SynthesisCompatibility'
+        reference_evaluation_id:
+          type: string
+          title: Reference Evaluation Id
+        evaluations:
+          items:
+            $ref: '#/components/schemas/ReplicationRobustnessSnapshot'
+          type: array
+          title: Evaluations
+        transitions:
+          items:
+            $ref: '#/components/schemas/ReplicationRobustnessTransition'
+          type: array
+          title: Transitions
+        supporting_replication_count:
+          type: integer
+          title: Supporting Replication Count
+        contradicting_replication_count:
+          type: integer
+          title: Contradicting Replication Count
+        direction_consistent:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Direction Consistent
+        mean_effect:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Mean Effect
+        effect_range:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Effect Range
+        relative_effect_range:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Relative Effect Range
+        effect_standard_deviation:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Effect Standard Deviation
+        heterogeneity_i2_percent:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Heterogeneity I2 Percent
+        worst_replication:
+          anyOf:
+          - $ref: '#/components/schemas/ReplicationRobustnessSnapshot'
+          - type: 'null'
+        worst_transition:
+          anyOf:
+          - $ref: '#/components/schemas/ReplicationRobustnessTransition'
+          - type: 'null'
+        method:
+          type: string
+          title: Method
+          default: multi-evaluation-replication-robustness-v1
+        relative_dispersion_threshold:
+          type: number
+          title: Relative Dispersion Threshold
+          default: 0.2
+        heterogeneity_i2_threshold_percent:
+          type: number
+          title: Heterogeneity I2 Threshold Percent
+          default: 50.0
+        dossier_hash:
+          type: string
+          title: Dossier Hash
+        immutable:
+          type: boolean
+          title: Immutable
+          default: true
+        reproducible:
+          type: boolean
+          title: Reproducible
+          default: true
+        idempotent_replay:
+          type: boolean
+          title: Idempotent Replay
+          default: false
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        warning:
+          type: string
+          title: Warning
+          default: Ce dossier qualifie uniquement la robustesse documentaire des évaluations
+            sélectionnées ; il ne conclut ni causalité ni vérité universelle.
+      additionalProperties: false
+      type: object
+      required:
+      - id
+      - evaluation_ids
+      - qualification
+      - compatibility
+      - reference_evaluation_id
+      - evaluations
+      - transitions
+      - supporting_replication_count
+      - contradicting_replication_count
+      - dossier_hash
+      - created_at
+      title: ReplicationRobustnessDossier
+    ReplicationRobustnessDossierCreate:
+      properties:
+        evaluation_ids:
+          items:
+            type: string
+          type: array
+          maxItems: 100
+          minItems: 2
+          title: Evaluation Ids
+      additionalProperties: false
+      type: object
+      required:
+      - evaluation_ids
+      title: ReplicationRobustnessDossierCreate
+      description: Only persisted evaluation identifiers are accepted.
+    ReplicationRobustnessQualification:
+      type: string
+      enum:
+      - ROBUST
+      - DIVERGENT
+      - INSUFFICIENT
+      - INCOMPATIBLE
+      title: ReplicationRobustnessQualification
+    ReplicationRobustnessSnapshot:
+      properties:
+        evaluation_id:
+          type: string
+          title: Evaluation Id
+        experiment_id:
+          type: string
+          title: Experiment Id
+        protocol_version:
+          type: integer
+          title: Protocol Version
+        protocol_hash:
+          type: string
+          title: Protocol Hash
+        evaluation_hash:
+          type: string
+          title: Evaluation Hash
+        observations_snapshot_hash:
+          type: string
+          title: Observations Snapshot Hash
+        effect:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Effect
+        effect_variance:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Effect Variance
+        interval95:
+          $ref: '#/components/schemas/Interval95'
+        source_verdict:
+          $ref: '#/components/schemas/Verdict'
+        deviation_qualification:
+          $ref: '#/components/schemas/DeviationVerdict'
+        deviation_report_hash:
+          type: string
+          title: Deviation Report Hash
+        sign:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Sign
+        supports_reference:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Supports Reference
+        contradicts_reference:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Contradicts Reference
+        interval_overlaps_reference:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Interval Overlaps Reference
+        relative_delta_from_reference:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Relative Delta From Reference
+      additionalProperties: false
+      type: object
+      required:
+      - evaluation_id
+      - experiment_id
+      - protocol_version
+      - protocol_hash
+      - evaluation_hash
+      - observations_snapshot_hash
+      - interval95
+      - source_verdict
+      - deviation_qualification
+      - deviation_report_hash
+      title: ReplicationRobustnessSnapshot
+    ReplicationRobustnessTransition:
+      properties:
+        from_evaluation_id:
+          type: string
+          title: From Evaluation Id
+        to_evaluation_id:
+          type: string
+          title: To Evaluation Id
+        effect_delta:
+          type: number
+          title: Effect Delta
+        relative_delta:
+          type: number
+          title: Relative Delta
+        direction_changed:
+          type: boolean
+          title: Direction Changed
+        intervals_overlap:
+          type: boolean
+          title: Intervals Overlap
+      additionalProperties: false
+      type: object
+      required:
+      - from_evaluation_id
+      - to_evaluation_id
+      - effect_delta
+      - relative_delta
+      - direction_changed
+      - intervals_overlap
+      title: ReplicationRobustnessTransition
+    ReplicationVerdict:
+      type: string
+      enum:
+      - REPLICATED
+      - NOT_REPLICATED
+      - INSUFFICIENT
+      - INCOMPATIBLE
+      title: ReplicationVerdict
+    SynthesisCompatibility:
+      properties:
+        hypothesis_statement:
+          type: boolean
+          title: Hypothesis Statement
+        group_roles:
+          type: boolean
+          title: Group Roles
+        direction:
+          type: boolean
+          title: Direction
+        minimum_effect:
+          type: boolean
+          title: Minimum Effect
+        metric_name:
+          type: boolean
+          title: Metric Name
+        metric_unit:
+          type: boolean
+          title: Metric Unit
+        analysis_method:
+          type: boolean
+          title: Analysis Method
+      additionalProperties: false
+      type: object
+      required:
+      - hypothesis_statement
+      - group_roles
+      - direction
+      - minimum_effect
+      - metric_name
+      - metric_unit
+      - analysis_method
+      title: SynthesisCompatibility
+    SynthesisCreate:
+      properties:
+        evaluation_ids:
+          items:
+            type: string
+          type: array
+          maxItems: 100
+          minItems: 2
+          title: Evaluation Ids
+      additionalProperties: false
+      type: object
+      required:
+      - evaluation_ids
+      title: SynthesisCreate
+      description: Only immutable server-side evaluation identifiers are accepted.
+    SynthesisEvaluationSnapshot:
+      properties:
+        evaluation_id:
+          type: string
+          title: Evaluation Id
+        experiment_id:
+          type: string
+          title: Experiment Id
+        protocol_version:
+          type: integer
+          title: Protocol Version
+        evaluation_hash:
+          type: string
+          title: Evaluation Hash
+        observations_snapshot_hash:
+          type: string
+          title: Observations Snapshot Hash
+        effect:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Effect
+        effect_variance:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Effect Variance
+        interval95:
+          $ref: '#/components/schemas/Interval95'
+        weight:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Weight
+        source_verdict:
+          $ref: '#/components/schemas/Verdict'
+      additionalProperties: false
+      type: object
+      required:
+      - evaluation_id
+      - experiment_id
+      - protocol_version
+      - evaluation_hash
+      - observations_snapshot_hash
+      - interval95
+      - source_verdict
+      title: SynthesisEvaluationSnapshot
+    SynthesisReport:
+      properties:
+        id:
+          type: string
+          title: Id
+        evaluation_ids:
+          items:
+            type: string
+          type: array
+          title: Evaluation Ids
+        experiment_ids:
+          items:
+            type: string
+          type: array
+          title: Experiment Ids
+        verdict:
+          $ref: '#/components/schemas/SynthesisVerdict'
+        compatibility:
+          $ref: '#/components/schemas/SynthesisCompatibility'
+        evaluations:
+          items:
+            $ref: '#/components/schemas/SynthesisEvaluationSnapshot'
+          type: array
+          title: Evaluations
+        method:
+          type: string
+          title: Method
+          default: fixed-effect-inverse-variance-v1
+        pooled_effect:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Pooled Effect
+        pooled_standard_error:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Pooled Standard Error
+        interval95:
+          $ref: '#/components/schemas/Interval95'
+        worst_effect:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Worst Effect
+        worst_interval95:
+          $ref: '#/components/schemas/Interval95'
+        direction_consistent:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Direction Consistent
+        cochran_q:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Cochran Q
+        heterogeneity_i2_percent:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Heterogeneity I2 Percent
+        synthesis_hash:
+          type: string
+          title: Synthesis Hash
+        immutable:
+          type: boolean
+          title: Immutable
+          default: true
+        reproducible:
+          type: boolean
+          title: Reproducible
+          default: true
+        idempotent_replay:
+          type: boolean
+          title: Idempotent Replay
+          default: false
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        warning:
+          type: string
+          title: Warning
+          default: Cette synthèse qualifie uniquement les instantanés compatibles
+            sélectionnés ; elle ne démontre ni causalité, ni validité externe, ni
+            vérité universelle.
+      additionalProperties: false
+      type: object
+      required:
+      - id
+      - evaluation_ids
+      - experiment_ids
+      - verdict
+      - compatibility
+      - evaluations
+      - interval95
+      - worst_interval95
+      - synthesis_hash
+      - created_at
+      title: SynthesisReport
+    SynthesisVerdict:
+      type: string
+      enum:
+      - CONSISTENT
+      - HETEROGENEOUS
+      - INSUFFICIENT
+      - INCOMPATIBLE
+      title: SynthesisVerdict
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    Verdict:
+      type: string
+      enum:
+      - SUPPORTED
+      - REJECTED
+      - INCONCLUSIVE
+      - INSUFFICIENT
+      title: Verdict
